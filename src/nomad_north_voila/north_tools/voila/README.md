@@ -1,10 +1,10 @@
-# voila_north_tool - NORTH tool
+# voila - NORTH tool
 
 This directory contains the configuration and a minimal Dockerfile template for defining a NORTH (NOMAD Remote Tools Hub) tool.
 
 ## Quick start
 
-The voila_north_tool NORTH tool provides a containerized environment defined in `NORTHtool` definition, `NorthToolEntryPoint`, and Dockerfile.
+The voila NORTH tool provides a Voila-based environment defined in `NORTHTool`, `NorthToolEntryPoint`, and Dockerfile.
 
 ## Base Image
 
@@ -26,17 +26,17 @@ Select the appropriate base image for your use case. The nomad-north-voila plugi
 Build the Docker image locally:
 
 ```bash
-docker build -f src/nomad_north_voila/north_tools/voila_north_tool/Dockerfile \
+docker build -f src/nomad_north_voila/north_tools/voila/Dockerfile \
     -t ghcr.io/FAIRmat-NFDI/nomad-north-voila:latest .
 ```
 
-Test the image (for jupyter notebook image):
+Test the image (Voila server):
 
 ```bash
 docker run -p 8888:8888 ghcr.io/FAIRmat-NFDI/nomad-north-voila:latest
 ```
 
-Access JupyterLab at `http://localhost:8888`.
+Access the service at `http://localhost:8888`.
 
 ## Documentation
 
