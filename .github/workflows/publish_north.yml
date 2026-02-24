@@ -12,7 +12,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_TAG: lab-3.6.2
-  NORTH_TOOL_DIR: src/nomad_north_voila/north_tools/voila_north_tool
+  NORTH_TOOL_DIR: src/nomad_north_voila/north_tools/voila
 
 permissions:
   packages: write
