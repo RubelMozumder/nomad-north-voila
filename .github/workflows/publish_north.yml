@@ -88,4 +88,4 @@ jobs:
         env:
           VERSION: ${{ github.ref_name }}
         run: |
-          sed -i "s|image='ghcr.io/FAIRmat-NFDI/nomad-north-voila:[^']*'|image='ghcr.io/FAIRmat-NFDI/nomad-north-voila:${VERSION}'|g" src/nomad_north_voila/north_tools/voila/__init__.py
+          sed -i "s|image='ghcr.io/fairmat-nfdi/nomad-north-voila:[^']*'|image='ghcr.io/fairmat-nfdi/nomad-north-voila:${VERSION}'|g" src/nomad_north_voila/north_tools/voila/__init__.py
