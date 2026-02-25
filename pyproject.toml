@@ -10,7 +10,7 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
-    "License :: OSI Approved :: Apache Software License",
+    "License :: OSI Approved :: MIT License",
 ]
 name = "nomad-north-voila"
 description = "A voila web application from Jupyter Notebook."
@@ -108,7 +108,6 @@ ignore = [
     "F403", # 'from module import *' used; unable to detect undefined names
     "PLC0415", # `import` should be at the top-level of a file
     "E501", # line too long
-    "PLR1714" # Repeated-equality-comparison.
 ]
 
 fixable = ["ALL"]
@@ -144,7 +143,7 @@ version_scheme = "no-guess-dev"
 local_scheme = "node-and-date"
 
 [project.entry-points.'nomad.plugin']
-north_tool_entry_point = "nomad_north_voila.north_tools.voila:north_tool_entry_point"
+north_tool_entry_point = "nomad_north_voila.north_tools.voila_north_tool:north_tool_entry_point"
 
 [tool.cruft]
 # Avoid updating workflow files, this leads to permissions issues
