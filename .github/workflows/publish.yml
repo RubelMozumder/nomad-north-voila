@@ -8,9 +8,28 @@ env:
     python-version: 3.12
 
 jobs:
+    # Write a test if the image `ghcr.io/fairmat-nfdi/nomad-north-voila:${{ github.ref_name }}` exists,
+    # on file src/nomad_north_voila/north_tools/voila/__init__.py
+    test-image:
+        name: Test if image tag is updated
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+                  submodules: recursive
+            - name: Check if image tag is updated
+              run: |
+                  IMAGE_TAG=$(grep -oP "ghcr\.io/fairmat-nfdi/nomad-north-voila:\K[^'\",]+" src/nomad_north_voila/north_tools/voila/__init__.py)
+                  if [[ "$IMAGE_TAG" != "${GITHUB_REF_NAME}" ]]; then
+                      echo "Image tag in __init__.py is not updated to ${GITHUB_REF_NAME}"
+                      echo "Found image tag: $IMAGE_TAG"
+                      exit 1
+
     build:
         name: Build Package
         runs-on: ubuntu-latest
+        needs: test-image
         steps:
             - uses: actions/checkout@v4
               with:
