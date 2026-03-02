@@ -60,6 +60,7 @@ jobs:
             git add src/nomad_north_voila/north_tools/voila/__init__.py
             git commit -m "chore: update image tag to ${{ steps.tag.outputs.REF_NAME }}"
             git push origin main
+          fi
 
   build:
     name: voila image
