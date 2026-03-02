@@ -35,23 +35,31 @@ jobs:
         id: tag
         run: |
           if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
-            echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+            echo "REF_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
           elif [[ "${GITHUB_REF}" == refs/heads/main ]]; then
-            echo "TAG=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
+            echo "REF_NAME=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
           fi
 
+      # sed -i "s|ghcr.io/fairmat-nfdi/nomad-north-voila:$IMAGE_TAG|ghcr.io/fairmat-nfdi/nomad-north-voila:${{ steps.tag.outputs.REF_NAME }}|g" \
+      # src/nomad_north_voila/north_tools/voila/__init__.py
       - name: Update image tag in source
+        id: update-image-tag
         run: |
-          sed -i "s|ghcr.io/fairmat-nfdi/nomad-north-voila:[^ '\"]*|ghcr.io/fairmat-nfdi/nomad-north-voila:${{ steps.tag.outputs.TAG }}|g" \
-            src/nomad_north_voila/north_tools/voila/__init__.py
+          IMAGE_TAG=$(grep -oP "ghcr\.io/fairmat-nfdi/nomad-north-voila:\K[^'\",]+" src/nomad_north_voila/north_tools/voila/__init__.py)
+
+          sed -i "s|ghcr.io/fairmat-nfdi/nomad-north-voila:$IMAGE_TAG|ghcr.io/fairmat-nfdi/nomad-north-voila:${{ steps.tag.outputs.REF_NAME }}|g" \
+          src/nomad_north_voila/north_tools/voila/__init__.py
+
+          echo "NORTH_IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_OUTPUT
 
       - name: Commit updated image tag
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add src/nomad_north_voila/north_tools/voila/__init__.py
-          git commit -m "chore: update image tag to ${{ steps.tag.outputs.TAG }}"
-          git push origin main
+          if [[ "${{steps.update-image-tag.outputs.NORTH_IMAGE_TAG}}" != "${{ steps.tag.outputs.REF_NAME }}" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add src/nomad_north_voila/north_tools/voila/__init__.py
+            git commit -m "chore: update image tag to ${{ steps.tag.outputs.REF_NAME }}"
+            git push origin main
 
   build:
     name: voila image
